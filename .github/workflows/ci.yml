@@ -16,3 +16,4 @@ jobs:
           build: npm run lint
           # start the application before running Cypress
           start: npm run start-quiet
+          record: true
