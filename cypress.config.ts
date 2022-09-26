@@ -20,6 +20,21 @@ export default defineConfig({
         },
       })
 
+      let runDashboardTag
+      let runDashboardUrl
+
+      on('before:run', (runDetails) => {
+        runDashboardUrl = runDetails.runUrl
+        runDashboardTag = runDetails.tag
+      })
+
+      on('after:spec', (spec, results) => {
+        if (!results.error) {
+          console.log(spec)
+          console.log(results)
+        }
+      })
+
       // make sure to return the config object
       // as it might have been modified by the plugin
       return config
