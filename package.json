@@ -1,0 +1,37 @@
+{
+  "name": "cypress-slack-example",
+  "version": "1.0.0",
+  "description": "Notify specific people in listed channels on Slack when a test fails",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "start": "http-server -p 8888 -c-1",
+    "start-quiet": "http-server -p 8888 -c-1 --silent",
+    "cypress": "cypress open",
+    "dev": "start-test 8888 cypress",
+    "print-tests": "find-cypress-specs --names --tags",
+    "lint": "tsc --noEmit --pretty",
+    "ci": "start-test 8888 cy:run",
+    "cy:run": "cypress run"
+  },
+  "keywords": [
+    "cypress",
+    "cypress-io",
+    "cypress-example",
+    "todomvc"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "http-server": "14.1.1"
+  },
+  "devDependencies": {
+    "cypress": "10.8.0",
+    "cypress-grep": "3.0.3",
+    "find-cypress-specs": "1.19.2",
+    "playwright-webkit": "^1.26.0",
+    "prettier": "2.7.1",
+    "start-server-and-test": "1.14.0",
+    "typescript": "4.8.3"
+  }
+}
