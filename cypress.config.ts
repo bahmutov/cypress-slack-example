@@ -1,19 +1,7 @@
 import { defineConfig } from 'cypress'
 import { getTestNames, setEffectiveTags } from 'find-test-names'
 import { readFileSync } from 'fs'
-
-const notifyOnTestFailures = {
-  'import-fixture-spec.ts': '#todomvc-fixtures-tests',
-}
-function findChannelToNotify(failedSpecRelativeFilename) {
-  const spec = Object.keys(notifyOnTestFailures).find((ch) => {
-    return failedSpecRelativeFilename.endsWith(ch)
-  })
-  if (!spec) {
-    return
-  }
-  return notifyOnTestFailures[spec]
-}
+import { postCypressSlackResult } from './cypress-slack-notify'
 
 export default defineConfig({
   projectId: '9wrvf1',
@@ -43,27 +31,31 @@ export default defineConfig({
         runDashboardTag = runDetails.tag
       })
 
-      on('after:spec', (spec, results) => {
-        // console.log(config)
-        // console.log(results)
-        if (results.error || results.stats.failures) {
-          console.log(spec)
-          console.error('Test failures in %s', spec.relative)
-          const slackChannel = findChannelToNotify(spec.relative)
-          if (slackChannel) {
-            console.error('need to notify channel "%s"', slackChannel)
-          } else {
-            console.error('no need to notify')
+      on('after:spec', async (spec, results) => {
+        try {
+          // console.log(config)
+          // console.log(results)
+          if (results.error || results.stats.failures) {
+            console.log(spec)
+            console.error('Test failures in %s', spec.relative)
+            await postCypressSlackResult(spec, {
+              runDashboardUrl,
+              runDashboardTag,
+            })
+            console.log('after postCypressSlackResult')
           }
+          // if (!results.error) {
+          //   console.log(spec)
+          //   console.log(JSON.stringify(results.tests))
+          //   const specSource = readFileSync(spec.absolute, 'utf8')
+          //   const specInfo = getTestNames(specSource, true)
+          //   setEffectiveTags(specInfo.structure)
+          //   console.log(specInfo.structure[0].suites[0])
+          // }
+        } catch (e) {
+          console.error('problem after spec')
+          console.error(e)
         }
-        // if (!results.error) {
-        //   console.log(spec)
-        //   console.log(JSON.stringify(results.tests))
-        //   const specSource = readFileSync(spec.absolute, 'utf8')
-        //   const specInfo = getTestNames(specSource, true)
-        //   setEffectiveTags(specInfo.structure)
-        //   console.log(specInfo.structure[0].suites[0])
-        // }
       })
 
       // make sure to return the config object
