@@ -5,5 +5,12 @@
     "automerge": false
   },
   "lockFileMaintenance": true,
-  "rangeStrategy": "pin"
+  "rangeStrategy": "pin",
+  "packageRules": [
+    {
+      "packagePatterns": ["*"],
+      "excludePackagePatterns": ["cypress", "cypress-slack-notify"],
+      "enabled": false
+    }
+  ]
 }
