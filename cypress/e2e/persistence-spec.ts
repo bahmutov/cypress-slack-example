@@ -29,7 +29,8 @@ describe('TodoMVC', function () {
       'should persist its data',
       { tags: ['@sanity', '@regression'] },
       function () {
-        addTodos(TODO_ITEM_ONE, TODO_ITEM_TWO)
+        // addTodos(TODO_ITEM_ONE, TODO_ITEM_TWO)
+        addTodos(TODO_ITEM_ONE)
         toggle(0).then(testState).reload().then(testState)
       },
     )

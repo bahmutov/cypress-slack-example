@@ -1,4 +1,4 @@
-import type { Todo } from './model'
+import type { Todo } from '../model'
 
 describe('Use JSON fixture', () => {
   it('adds todos following the fixture', () => {

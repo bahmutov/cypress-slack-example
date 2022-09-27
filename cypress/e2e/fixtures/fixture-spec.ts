@@ -1,4 +1,4 @@
-import type { Todo } from './model'
+import type { Todo } from '../model'
 it('adds todos following the fixture', () => {
   cy.visit('/')
   cy.fixture<{ todos: Todo[] }>('todos.json')

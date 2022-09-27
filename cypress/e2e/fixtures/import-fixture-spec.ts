@@ -1,9 +1,9 @@
-import type { Todo } from './model'
-import { todos } from '../fixtures/todos.json'
+import type { Todo } from '../model'
+import { todos } from '../../fixtures/todos.json'
 
 const initialTodos: Todo[] = todos
 
-describe('Import JSON fixture', () => {
+describe('Import JSON fixture', { tags: '@regression' }, () => {
   it('adds todos following the fixture', () => {
     cy.visit('/')
     initialTodos.forEach((todo, k) => {
@@ -14,5 +14,7 @@ describe('Import JSON fixture', () => {
         cy.get('.todo-list li').last().should('have.class', 'completed')
       }
     })
+    // make the test fail on purpose
+    cy.get('.todo-list li').should('have.length', initialTodos.length + 2)
   })
 })
