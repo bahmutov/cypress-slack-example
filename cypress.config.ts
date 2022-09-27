@@ -21,32 +21,16 @@ export default defineConfig({
         },
       })
 
-      let runDashboardTag
-      let runDashboardUrl
-
-      on('before:run', (runDetails) => {
-        runDashboardUrl = runDetails.runUrl
-        runDashboardTag = runDetails.tag
-      })
-
-      on('after:spec', async (spec, results) => {
-        try {
-          // error - unexpected crash, the tests could not run
-          if (results.error || results.stats.failures) {
-            console.error('Test failures in %s', spec.relative)
-            // TODO handle both an unexpected error
-            // and the specific number of failed tests
-            await postCypressSlackResult(spec, results.stats.failures, {
-              runDashboardUrl,
-              runDashboardTag,
-            })
-            console.log('after postCypressSlackResult')
-          }
-        } catch (e) {
-          console.error('problem after spec')
-          console.error(e)
-        }
-      })
+      const notifyOnTestFailures = {
+        // for the spec, list the channel and any specific users to notify
+        // separated by spaces
+        'adding-specs.ts': '#todomvc-adding-items-tests',
+        'import-fixture-spec.ts': '#todomvc-fixtures-tests @gleb.bahmutov',
+        'routing-spec.ts': '#todomvc-routing-tests',
+        // TODO: add support for finding notifications by test tags
+      }
+      // https://github.com/bahmutov/cypress-slack-notify
+      require('cypress-slack-notify')(notifyOnTestFailures, on)
 
       // make sure to return the config object
       // as it might have been modified by the plugin
