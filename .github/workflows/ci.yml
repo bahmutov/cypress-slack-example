@@ -19,7 +19,7 @@ jobs:
           # since some of the tests should fail, we can use cypress-expect
           # to verify they indeed fail
           # https://github.com/bahmutov/cypress-expect
-          command: npx cypress-expect run --record --expect cypress/expected.json
+          command: npx cypress-expect run --record --tag ci --expect cypress/expected.json
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}

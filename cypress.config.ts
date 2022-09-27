@@ -28,8 +28,16 @@ export default defineConfig({
         'routing-spec.ts': '#todomvc-routing-tests',
         // TODO: add support for finding notifications by test tags
       }
+      const notifyConditions = {
+        whenRecordingOnDashboard: true,
+        whenRecordingDashboardTag: 'ci',
+      }
       // https://github.com/bahmutov/cypress-slack-notify
-      require('cypress-slack-notify')(on, notifyOnTestFailures)
+      require('cypress-slack-notify')(
+        on,
+        notifyOnTestFailures,
+        notifyConditions,
+      )
 
       // make sure to return the config object
       // as it might have been modified by the plugin
