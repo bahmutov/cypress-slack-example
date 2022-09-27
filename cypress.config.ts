@@ -1,5 +1,4 @@
 import { defineConfig } from 'cypress'
-import { postCypressSlackResult } from './cypress-slack-notify'
 
 export default defineConfig({
   projectId: '9wrvf1',
@@ -30,7 +29,7 @@ export default defineConfig({
         // TODO: add support for finding notifications by test tags
       }
       // https://github.com/bahmutov/cypress-slack-notify
-      require('cypress-slack-notify')(notifyOnTestFailures, on)
+      require('cypress-slack-notify')(on, notifyOnTestFailures)
 
       // make sure to return the config object
       // as it might have been modified by the plugin
