@@ -55,7 +55,11 @@ export async function postCypressSlackResult(spec, failedN: number, runInfo) {
       failedN,
     )} failed in spec *${spec.relative}*`
     if (runInfo.runDashboardUrl) {
-      text += `\nCypress Dashboard URL: ${runInfo.runDashboardUrl}`
+      // since we deal with the failed specs
+      // point the users to the failures right away
+      const overviewFailedUrl =
+        runInfo.runDashboardUrl + '/overview?reviewViewBy=FAILED'
+      text += `\nCypress Dashboard URL: ${overviewFailedUrl}`
     }
     if (runInfo.runDashboardTag) {
       text += `\nRun tags: ${runInfo.runDashboardTag
