@@ -74,7 +74,8 @@ describe('TodoMVC', function () {
       cy.get('.filters').within(function () {
         cy.contains('All').should('have.class', 'selected')
         cy.contains('Active').click().should('have.class', 'selected')
-        cy.contains('Completed').click().should('have.class', 'selected')
+        // make the test fail on purpose
+        cy.contains('Completed').click().should('have.class', 'unselected')
       })
     })
   })

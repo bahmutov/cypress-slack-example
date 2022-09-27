@@ -3,8 +3,12 @@ const { WebClient } = require('@slack/web-api')
 const notifyOnTestFailures = {
   // for the spec, list the channel and any specific users to notify
   // separated by spaces
+  'adding-specs.ts': '#todomvc-adding-items-tests',
   'import-fixture-spec.ts': '#todomvc-fixtures-tests @gleb.bahmutov',
+  'routing-spec.ts': '#todomvc-routing-tests',
+  // TODO: add support for finding notifications by test tags
 }
+
 function findChannelToNotify(failedSpecRelativeFilename) {
   const spec = Object.keys(notifyOnTestFailures).find((ch) => {
     return failedSpecRelativeFilename.endsWith(ch)
@@ -23,10 +27,12 @@ function getChannelAndPeople(s) {
   return { channel, people }
 }
 
+const getTestPluralForm = (n) => (n === 1 ? 'test' : 'tests')
+
 // looking up user ids from user aliases
 let usersStore
 
-export async function postCypressSlackResult(spec, runInfo) {
+export async function postCypressSlackResult(spec, failedN: number, runInfo) {
   if (!process.env.SLACK_TOKEN) {
     return
   }
@@ -45,7 +51,9 @@ export async function postCypressSlackResult(spec, runInfo) {
   const { channel, people } = getChannelAndPeople(notify)
   if (channel) {
     console.error('need to notify channel "%s"', channel)
-    let text = `Cypress tests failed in spec *${spec.relative}*`
+    let text = `🚨 ${failedN} Cypress ${getTestPluralForm(
+      failedN,
+    )} failed in spec *${spec.relative}*`
     if (runInfo.runDashboardUrl) {
       text += `\nCypress Dashboard URL: ${runInfo.runDashboardUrl}`
     }
@@ -57,11 +65,18 @@ export async function postCypressSlackResult(spec, runInfo) {
     if (people && people.length) {
       if (!usersStore) {
         usersStore = {}
-        const userResult = await web.users.list()
-        userResult.members.forEach((u) => {
-          // console.log(u)
-          usersStore[u.name] = u.id
-        })
+        try {
+          const userResult = await web.users.list()
+          userResult.members.forEach((u) => {
+            // console.log(u)
+            usersStore[u.name] = u.id
+          })
+        } catch (e) {
+          console.error('Could not fetch the users list')
+          console.error(
+            'Perhaps the app does not have "users:read" scope permission',
+          )
+        }
       }
       // https://api.slack.com/reference/surfaces/formatting#mentioning-users
       const userIds = people
