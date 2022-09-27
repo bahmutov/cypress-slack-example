@@ -1,0 +1,13 @@
+{
+  "Import JSON fixture": {
+    "adds todos following the fixture": "fail"
+  },
+  "TodoMVC": {
+    "Persistence": {
+      "should persist its data": "fail"
+    },
+    "Routing": {
+      "should highlight the currently applied filter": "fail"
+    }
+  }
+}

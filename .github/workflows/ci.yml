@@ -16,7 +16,10 @@ jobs:
           build: npm run lint
           # start the application before running Cypress
           start: npm run start-quiet
-          record: true
+          # since some of the tests should fail, we can use cypress-expect
+          # to verify they indeed fail
+          # https://github.com/bahmutov/cypress-expect
+          command: npx cypress-expect run --record --expect cypress/expected.json
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
