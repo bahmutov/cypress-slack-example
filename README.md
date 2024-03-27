@@ -15,4 +15,4 @@ Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2022
 - [Cypress Tips & Tricks Newsletter](https://cypresstips.substack.com/)
 - [my Cypress courses](https://cypress.tips/courses)
 
-License: MIT - do anything with the code, but don't blame me if it does not work.
+License: MIT - do anything with the code, but don't blame me if it does not work
